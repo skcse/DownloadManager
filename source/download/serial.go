@@ -2,37 +2,32 @@ package download
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/skcse/DownloadManager/source/status"
 	"net/http"
-	"sync"
 	"time"
 )
 
-func serialDownload(writer http.ResponseWriter,request *http.Request,urls []string,starttime time.Time)  {
+type serial struct {
+	Urls []string
+}
+
+func (s serial) startDownload(writer http.ResponseWriter,request *http.Request,urls []string)  {
+
+	startTime:=time.Now()
 	mapFiles:=make(map[string]string)
 	for _,url:= range urls{
 		name:= generateId()
-		_= downloadFile(url,name)
+		_=downloadFile(url,name)
 		mapFiles[url]=name
 	}
-	var wg sync.WaitGroup
-	wg.Add(1)
 	id:= generateId()
 	idData:= downloadId{Id: id}
 	writer.Header().Set("Content-Type", "application/json")
 	js,_:=json.Marshal(idData)
 
-	status.Mp[id]= status.Status{id,starttime,time.Now(),"SUCCESSFUL","SERIAL",mapFiles}
+	status.Mp[id]= status.Status{id,startTime,time.Now(),"SUCCESSFUL","SERIAL",mapFiles}
 
-	go writer.Write(js)
-	go call(&wg)
-	fmt.Fprintln(writer,"hi there!!")
-	wg.Wait()
+	writer.Write(js)
 }
 
-func call(wg *sync.WaitGroup)  {
-	time.Sleep(10*time.Second)
-	wg.Done()
 
-}

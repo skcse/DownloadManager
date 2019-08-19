@@ -1,7 +1,7 @@
 package status
 
 import (
-	"fmt"
+	"encoding/json"
 	"log"
 	"net/http"
 	"net/url"
@@ -30,9 +30,7 @@ func GetStatus(w http.ResponseWriter, r *http.Request)  {
 		log.Fatal(err)
 	}
 	id:= u.RawQuery
-	status:=Mp[id]
-	fmt.Fprintln(w,status)
-	//mp:=Mp[id]
-	//js,_:=json.Marshal(mp)
-
+	rstatus:=Mp[id]
+	js,_:=json.Marshal(rstatus)
+	w.Write(js)
 }

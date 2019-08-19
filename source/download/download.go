@@ -8,10 +8,13 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"time"
 )
 
 var folderPath ="/tmp"
+
+type Download interface {
+	startDownload(http.ResponseWriter,*http.Request,[]string)
+}
 
 type linkDownload struct {
 	Type string   `json:"type"`
@@ -22,19 +25,32 @@ type downloadId struct {
 	Id string
 }
 
-func Download(writer http.ResponseWriter, request *http.Request)  {
+func callDownload(down Download,writer http.ResponseWriter,request *http.Request,urls []string) {
+	down.startDownload(writer,request,urls)
+}
+
+func DownloadFunc(writer http.ResponseWriter, request *http.Request)  {
 	var linkBody linkDownload
-	r,_:=ioutil.ReadAll(request.Body)
-	err:=json.Unmarshal(r,&linkBody)
-	if err!=nil{
+	r,e1:=ioutil.ReadAll(request.Body)
+	if e1!=nil{
+		writer.WriteHeader(401)
+		fmt.Fprintln(writer,"Cannot read payload")
+	}
+
+	e2:=json.Unmarshal(r,&linkBody)
+	if e2!=nil{
 		writer.WriteHeader(401)
 		fmt.Fprintln(writer,"Cannot parse payload")
 	}
+
 	if linkBody.Type =="serial"{
-		startTime:=time.Now()
-		serialDownload(writer,request,linkBody.Urls,startTime)
+		serialObj:=serial{Urls:linkBody.Urls}
+		callDownload(serialObj,writer,request,linkBody.Urls)
+
 	}else if linkBody.Type =="concurrent"{
-		concurrent(writer,request,linkBody.Urls)
+		concurrentObj:=concurrent{Urls:linkBody.Urls}
+		callDownload(concurrentObj,writer,request,linkBody.Urls)
+
 	}else{
 		writer.WriteHeader(401)
 		fmt.Fprintln(writer,"Download type doesnt exit:",linkBody.Type)

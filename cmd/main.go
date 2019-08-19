@@ -16,7 +16,7 @@ func main()  {
 			fmt.Fprintln(writer,"OK")
 	})
 	h.HandleFunc("/", home)
-	h.HandleFunc("/downloads", download.Download)
+	h.HandleFunc("/downloads", download.DownloadFunc)
 	h.HandleFunc("/getStatus/", status.GetStatus)
 	err:=http.ListenAndServe(":8000",h)
 	log.Fatal(err)
