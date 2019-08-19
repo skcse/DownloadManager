@@ -3,11 +3,11 @@ package download
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/google/uuid"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
-	"github.com/google/uuid"
 	"time"
 )
 
