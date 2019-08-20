@@ -57,15 +57,15 @@ func DownloadFunc(writer http.ResponseWriter, request *http.Request)  {
 	}
 }
 
-func downloadFile(url string,id string) error {
-
-	filepath:=folderPath+"/"+ id
+func downloadFile(url string,id string,folder string) error {
+	fileFolder:=folderPath+"/"+ folder
 	resp, err := http.Get(url)
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
-
+	os.MkdirAll(fileFolder,os.ModePerm)
+	filepath:=fileFolder+ "/" + id
 	out, err := os.Create(filepath)
 	if err != nil {
 		return err

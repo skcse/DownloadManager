@@ -15,9 +15,10 @@ func (s serial) startDownload(writer http.ResponseWriter,request *http.Request,u
 
 	startTime:=time.Now()
 	mapFiles:=make(map[string]string)
+	folder:=generateId()
 	for _,url:= range urls{
 		name:= generateId()
-		_=downloadFile(url,name)
+		_=downloadFile(url,name,folder)
 		mapFiles[url]=name
 	}
 	id:= generateId()

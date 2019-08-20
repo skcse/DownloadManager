@@ -2,6 +2,7 @@ package status
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"net/url"
@@ -39,6 +40,7 @@ func GetStatus(w http.ResponseWriter, r *http.Request)  {
 	}else{
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
+		fmt.Fprintln(w,"Download Id not found")
 	}
 
 }
