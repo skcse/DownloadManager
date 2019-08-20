@@ -19,7 +19,7 @@ func (s serial) startDownload(writer http.ResponseWriter,request *http.Request,u
 	for _,url:= range urls{
 		name:= generateId()
 		_=downloadFile(url,name,folder)
-		mapFiles[url]=name
+		mapFiles[url]=FolderPath + "/" + folder + "/" + name
 	}
 	id:= generateId()
 	idData:= downloadId{Id: id}

@@ -19,7 +19,7 @@ func (c concurrent) startDownload(writer http.ResponseWriter,request *http.Reque
 	finalMapFiles:=make(map[string]string)
 	for _,url:=range urls{
 		name := generateId()
-		mapFiles[url]=folder+ "/" + name
+		mapFiles[url]=FolderPath + "/" +folder+ "/" + name
 	}
 	const limitWorker =6
 	reqChan:=make(chan string)
@@ -55,8 +55,8 @@ func worker(reqChan chan string,mapFiles map[string]string,finalMapFiles map[str
 				}
 				folderPath:=mapFiles[url]
 				arr:=strings.Split(folderPath,"/")
-				_ = downloadFile(url,arr[1] ,arr[0])
-				finalMapFiles[url] = arr[1]
+				_ = downloadFile(url,arr[3] ,arr[2])
+				finalMapFiles[url] = arr[3]
 			}
 			if urlsCount == len(finalMapFiles){
 				status.Mp[downId]= status.Status{downId,startTime,time.Now(),"SUCCESSFUL","CONCURRENT",mapFiles}

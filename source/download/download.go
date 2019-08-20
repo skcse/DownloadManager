@@ -10,7 +10,7 @@ import (
 	"os"
 )
 
-var folderPath ="/tmp"
+var FolderPath ="/tmp"
 
 type Download interface {
 	startDownload(http.ResponseWriter,*http.Request,[]string)
@@ -58,7 +58,8 @@ func DownloadFunc(writer http.ResponseWriter, request *http.Request)  {
 }
 
 func downloadFile(url string,id string,folder string) error {
-	fileFolder:=folderPath+"/"+ folder
+	fileFolder:=FolderPath+"/"+ folder
+	//fmt.Println(folder)
 	resp, err := http.Get(url)
 	if err != nil {
 		return err
