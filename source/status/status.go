@@ -30,7 +30,15 @@ func GetStatus(w http.ResponseWriter, r *http.Request)  {
 		log.Fatal(err)
 	}
 	id:= u.RawQuery
-	rstatus:=Mp[id]
-	js,_:=json.Marshal(rstatus)
-	w.Write(js)
+
+	if rstatus,ok:=Mp[id]; ok{
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		js,_:=json.Marshal(rstatus)
+		w.Write(js)
+	}else{
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(400)
+	}
+
 }

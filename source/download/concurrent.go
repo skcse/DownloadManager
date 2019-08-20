@@ -29,6 +29,7 @@ func (c concurrent) startDownload(writer http.ResponseWriter,request *http.Reque
 	id:= generateId()
 	idData:= downloadId{Id: id}
 	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(200)
 	js,_:=json.Marshal(idData)
 
 	status.Mp[id]= status.Status{id,startTime,time.Now(),"QUEUED","CONCURRENT",mapFiles}
@@ -61,4 +62,3 @@ func worker(reqChan chan string,mapFiles map[string]string,finalMapFiles map[str
 			}
 		}
 }
-

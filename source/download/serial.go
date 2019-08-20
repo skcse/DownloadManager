@@ -23,6 +23,7 @@ func (s serial) startDownload(writer http.ResponseWriter,request *http.Request,u
 	id:= generateId()
 	idData:= downloadId{Id: id}
 	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(200)
 	js,_:=json.Marshal(idData)
 
 	status.Mp[id]= status.Status{id,startTime,time.Now(),"SUCCESSFUL","SERIAL",mapFiles}

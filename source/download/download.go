@@ -33,13 +33,13 @@ func DownloadFunc(writer http.ResponseWriter, request *http.Request)  {
 	var linkBody linkDownload
 	r,e1:=ioutil.ReadAll(request.Body)
 	if e1!=nil{
-		writer.WriteHeader(401)
+		writer.WriteHeader(400)
 		fmt.Fprintln(writer,"Cannot read payload")
 	}
 
 	e2:=json.Unmarshal(r,&linkBody)
 	if e2!=nil{
-		writer.WriteHeader(401)
+		writer.WriteHeader(400)
 		fmt.Fprintln(writer,"Cannot parse payload")
 	}
 
@@ -52,7 +52,7 @@ func DownloadFunc(writer http.ResponseWriter, request *http.Request)  {
 		callDownload(concurrentObj,writer,request,linkBody.Urls)
 
 	}else{
-		writer.WriteHeader(401)
+		writer.WriteHeader(400)
 		fmt.Fprintln(writer,"Download type doesnt exit:",linkBody.Type)
 	}
 }
